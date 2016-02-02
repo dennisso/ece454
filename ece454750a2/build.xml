@@ -1,0 +1,120 @@
+<project name="a2" default="a2" basedir=".">
+
+  <description>ECE 454 / 750 Assignment 2 Part B</description>
+
+  <property name="src" location="src" />
+  <property name="build" location="build" />
+  <property name="output" location="output" />
+
+  <path id="build.classpath">
+  </path>
+
+  <path id="a2.classpath">
+    <path refid="build.classpath" />
+    <pathelement path="${build}" />
+    <pathelement path="a2.jar" />
+  </path>
+  
+  <target name="init">
+    <tstamp />
+    <mkdir dir="${build}"/>
+    <mkdir dir="${build}/log"/>
+    <mkdir dir="${output}"/>
+  </target>
+
+  <target name="compile" depends="init">
+    <javac source="1.6" target="1.6" debug="true" includeantruntime="false" srcdir="${src}" destdir="${build}" classpathref="build.classpath" />
+  </target>
+
+  <target name="test" depends="a2" />
+
+  <target name="a2" description="Run the solution" depends="compile">
+    <jar jarfile="a2.jar" basedir="${build}"/>
+  	<sequential>
+      <echo>A2 test</echo>
+      <java classname="ece454750s15a2.TriangleCount"
+            classpathref="a2.classpath" failonerror="true">
+        <arg line="-ncores 4 -if data/graph1K_A.txt -of output/graph1K_A_output.txt"/>
+      </java>
+    </sequential>
+	<sequential>
+      <echo>A2 test</echo>
+      <java classname="ece454750s15a2.TriangleCount"
+            classpathref="a2.classpath" failonerror="true">
+        <arg line="-ncores 4 -if data/graph1K_B.txt -of output/graph1K_B_output.txt"/>
+      </java>
+    </sequential>
+	<sequential>
+      <echo>A2 test</echo>
+      <java classname="ece454750s15a2.TriangleCount"
+            classpathref="a2.classpath" failonerror="true">
+        <arg line="-ncores 4 -if data/graph1K_C.txt -of output/graph1K_C_output.txt"/>
+      </java>
+    </sequential>
+  	<sequential>
+      <echo>A2 test</echo>
+      <java classname="ece454750s15a2.TriangleCount"
+            classpathref="a2.classpath" failonerror="true">
+        <arg line="-ncores 4 -if data/graph10K_A.txt -of output/graph10K_A_output.txt"/>
+      </java>
+    </sequential>
+	<sequential>
+      <echo>A2 test</echo>
+      <java classname="ece454750s15a2.TriangleCount"
+            classpathref="a2.classpath" failonerror="true">
+        <arg line="-ncores 4 -if data/graph10K_B.txt -of output/graph10K_B_output.txt"/>
+      </java>
+    </sequential>
+	<sequential>
+      <echo>A2 test</echo>
+      <java classname="ece454750s15a2.TriangleCount"
+            classpathref="a2.classpath" failonerror="true">
+        <arg line="-ncores 4 -if data/graph10K_C.txt -of output/graph10K_C_output.txt"/>
+      </java>
+    </sequential>
+    <sequential>
+      <echo>A2 test</echo>
+      <java classname="ece454750s15a2.TriangleCount"
+            classpathref="a2.classpath" failonerror="true">
+        <arg line="-ncores 4 -if data/graph100K_A.txt -of output/graph100K_A_output.txt"/>
+      </java>
+    </sequential>
+  	<sequential>
+      <echo>A2 test</echo>
+      <java classname="ece454750s15a2.TriangleCount"
+            classpathref="a2.classpath" failonerror="true">
+        <arg line="-ncores 4 -if data/graph100K_B.txt -of output/graph100K_B_output.txt"/>
+      </java>
+    </sequential>
+	<sequential>
+      <echo>A2 test</echo>
+      <java classname="ece454750s15a2.TriangleCount"
+            classpathref="a2.classpath" failonerror="true">
+        <arg line="-ncores 4 -if data/graph100K_C.txt -of output/graph100K_C_output.txt"/>
+      </java>
+    </sequential>
+  	<sequential>
+      <echo>A2 test</echo>
+      <java classname="ece454750s15a2.TriangleCount"
+            classpathref="a2.classpath" failonerror="true">
+        <arg line="-ncores 4 -if data/graph1M_A.txt -of output/graph1M_A_output.txt"/>
+      </java>
+    </sequential>
+	<sequential>
+      <echo>A2 test</echo>
+      <java classname="ece454750s15a2.TriangleCount"
+            classpathref="a2.classpath" failonerror="true">
+        <arg line="-ncores 4 -if data/graph1M_B.txt -of output/graph1M_B_output.txt"/>
+      </java>
+    </sequential>
+  </target>
+
+  <target name="clean">
+    <delete dir="${build}" />
+    <delete dir="${gen}"/>
+    <delete dir="${output}"/>
+    <delete file="a2.jar" />
+    <delete file="output.txt" />
+    <delete file="ece454750a2.tar.gz" />
+  </target>
+</project>

@@ -1,0 +1,162 @@
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements. See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership. The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License. You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied. See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+<project name="a1" default="a1" basedir=".">
+
+    <description>ece454750s15a1</description>
+
+    <property name="src" location="src"/>
+    <property name="gen" location="gen-java"/>
+    <property name="build" location="build"/>
+
+    <path id="libs.classpath">
+        <fileset dir="third_party_src/thrift-0.9.2/lib/java/build">
+            <include name="*.jar"/>
+            <exclude name="-test.jar"/>
+        </fileset>
+        <fileset dir="third_party_src/jBCrypt-0.4">
+            <include name="*.jar"/>
+            <exclude name="-test.jar"/>
+        </fileset>
+        <fileset dir="third_party_src/thrift-0.9.2/lib/java/build/lib">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+    <path id="build.classpath">
+        <path refid="libs.classpath"/>
+        <pathelement path="${gen}"/>
+    </path>
+    <path id="a1.classpath">
+        <path refid="build.classpath"/>
+        <pathelement path="${build}"/>
+        <pathelement path="ece454750s15a1.jar"/>
+    </path>
+
+    <target name="init">
+        <tstamp/>
+        <mkdir dir="${build}"/>
+        <mkdir dir="${build}/log"/>
+    </target>
+
+    <target name="compile" depends="init, generate">
+        <javac source="1.6" target="1.6" srcdir="${gen}" destdir="${build}" classpathref="libs.classpath"/>
+        <!-- thrift libs -->
+        <javac source="1.6" target="1.6" srcdir="${src}" destdir="${build}" classpathref="build.classpath"/>
+        <!-- auto-gen libs from .thrift files -->
+    </target>
+
+    <target name="test" depends="a1"/>
+
+    <!-- target name="a1" description="assignment_1" -->
+    <target name="a1" description="Run the assignment_1" depends="compile">
+        <jar jarfile="ece454750s15a1.jar" basedir="${build}"/>
+        <parallel>
+            <java classname="BEServer" fork="true" timeout="10000"
+                  classpathref="a1.classpath" failonerror="false" output="${build}/log/tutorial.log">
+                <arg line="-mport 24269 -pport 34269"/>
+            </java>
+            <sequential>
+                <sleep seconds="2"/>
+                <echo>tutorial client simple:</echo>
+                <java classname="BEClient"
+                      classpathref="a1.classpath" failonerror="true">
+                    <arg line="-mport 24269 -pport 34269"/>
+                </java>
+            </sequential>
+        </parallel>
+    </target>
+
+    <target name="generate">
+        <!-- Generate the thrift gen-java source -->
+        <!-- exec executable="../../compiler/cpp/thrift" failonerror="true" -->
+        <exec executable="thrift-0.9.2.exe" failonerror="true">
+            <arg line="--gen java -r src/tutorial.thrift"/>
+        </exec>
+    </target>
+
+    <target name="beclient" description="Run a tutorial client" depends="compile">
+        <echo>client simple: mport and pport specifies the ports to where it connects</echo>
+        <java classname="BEClient"
+              classpathref="a1.classpath" failonerror="false">
+            <arg line="-mport 24261 -pport 34261 -seeds localhost:24261"/>
+        </java>
+    </target>
+
+    <target name="beclient2" description="Run a tutorial client" depends="compile">
+        <echo>client simple: mport and pport specifies the ports to where it connects</echo>
+        <java classname="BEClient"
+              classpathref="a1.classpath" failonerror="false">
+            <arg line="-mport 24262 -pport 34262 -seeds localhost:24261"/>
+        </java>
+    </target>
+
+    <target name="feserver" description="Run a tutorial server" depends="compile">
+        <echo>fe server: mport and pport specifies the listening ports</echo>
+        <java classname="FEServer" fork="true"
+              classpathref="a1.classpath" failonerror="false">
+            <arg line="-mport 24261 -pport 34261 -seeds localhost:24261"/>
+        </java>
+    </target>
+
+    <target name="feserver2" description="Run a tutorial server" depends="compile">
+        <echo>fe server: mport and pport specifies the listening ports</echo>
+        <java classname="FEServer" fork="true"
+              classpathref="a1.classpath" failonerror="false">
+            <arg line="-mport 24262 -pport 34262 -seeds localhost:24261"/>
+        </java>
+    </target>
+
+    <target name="feserver3" description="Run a tutorial server" depends="compile">
+        <echo>fe server: mport and pport specifies the listening ports</echo>
+        <java classname="FEServer" fork="true"
+              classpathref="a1.classpath" failonerror="false">
+            <arg line="-mport 24263 -pport 34263 -seeds localhost:24261"/>
+        </java>
+    </target>
+
+    <target name="feserver4" description="Run a tutorial server" depends="compile">
+        <echo>fe server: mport and pport specifies the listening ports</echo>
+        <java classname="FEServer" fork="true"
+              classpathref="a1.classpath" failonerror="false">
+            <arg line="-mport 24264 -pport 34264 -seeds localhost:24261"/>
+        </java>
+    </target>
+
+    <target name="beserver" description="Run a tutorial server" depends="compile">
+        <echo>be server: mport and pport specifies the listening ports</echo>
+        <java classname="BEServer" fork="true"
+              classpathref="a1.classpath" failonerror="false">
+            <arg line="-mport 24271 -pport 34271 -seeds localhost:24261"/>
+        </java>
+    </target>
+
+    <target name="beserver2" description="Run a tutorial server" depends="compile">
+        <echo>be server: mport and pport specifies the listening ports</echo>
+        <java classname="BEServer" fork="true"
+              classpathref="a1.classpath" failonerror="false">
+            <arg line="-mport 24272 -pport 34272 -seeds localhost:24261"/>
+        </java>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build}"/>
+        <delete dir="${gen}"/>
+        <delete file="ece454750s15a1.jar"/>
+    </target>
+
+</project>
